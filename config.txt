@@ -1,0 +1,13 @@
+Tool_Radius = 15
+pathFile = WayPoints_test.txt
+Adjust_Threshold = 1
+toolthickness = 10
+depth = 1
+PathResolution = 7
+RPYresolution = 7
+End effector length = 0.2
+Smooth = false
+Alignment = true
+ChangeRange = true
+RemoveOutlier = false
+Dynamic_adjustment = true
