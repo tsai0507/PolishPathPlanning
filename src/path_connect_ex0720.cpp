@@ -1,4 +1,5 @@
-#include "path_connect.h"
+#include "path_connect_ex0720.h"
+// #include "Path_Generate_Algorithm.h"
 
 SectPath::SectPath(std::string configName, std::string CloudFileName, double Radius)
     :toolRadius(Radius), cloud_name(CloudFileName)

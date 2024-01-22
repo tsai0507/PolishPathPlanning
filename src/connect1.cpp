@@ -1,10 +1,13 @@
 #include <iostream>
-#include "Path_Generate.h"
+#include <X11/Xlib.h>
 #include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include "Path_Generate_Algorithm.h"
 
 int main(int argc, char **argv)
 {
+    //deal with thread problem of pcl occured sometime
+    XInitThreads();
     if (argc < 2)
     {
         cout << "./slicing_method cad_name.pcd" << endl;
@@ -17,19 +20,10 @@ int main(int argc, char **argv)
         return (-1);
     }
 
-    double step_size = 0;
-    // std::cout << "Please enter the Radius: ";
-    // std::cin >> step_size;
-    step_size = 15;
-    path_generater path_planner(argv[pcd_file_indices[0]], step_size);
-    // path_planner.voxel_down(0.1, 1, 1);    
-    // path_planner.trans2center();
-
-    // path_planner.slicing_method();
-    // path_planner.smooth();
-    path_planner.estimate_normal();
-    path_planner.Contact_Path_Generation();
-    // path_planner.get_coverage();
+    std::string configFile = "../config.txt";
+    path_generater path_planner = {configFile, argv[pcd_file_indices[0]]};
+    path_planner.GenPath();
+    path_planner.getPath();
     path_planner.show();
 
     return 0;

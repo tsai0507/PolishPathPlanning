@@ -346,28 +346,32 @@ void path_generater::GenPath()
 
     ///////////////////////////////////////////////////////
     // >>>>>>>>>>>>>>>>  generate path  <<<<<<<<<<<<<<<< //
-    std::vector<Spline> path_set2front, path_set2back;
-    Spline Center_path;
+    int step_size = toolRadius*2, loc = min_pt.x + toolRadius;
+    auto boundary = std::make_shared<Spline>();
+    
+    // generate first path
+    Spline First_path;
+    First_path = OnePath(Eigen::Vector3f(loc, 0, 0));
+    loc += step_size;
+    Path_set.push_back(First_path);
+    drawpath(First_path, 0, 0, 255);
 
-    // generate center path //
-    Center_path = OnePath(Eigen::Vector3f((min_pt.x+max_pt.x)/2, 0, 0));
-    drawpath(Center_path, 0, 0, 255);
+    
+    Spline pre_path = First_path;
 
-    // thread data
-    thread_wrap_data data1(Dir::left, min_pt.x, max_pt.x, Center_path);
-    thread_wrap_data data2(Dir::right, min_pt.x, max_pt.x, Center_path);
-    // thread work
-    std::thread thread1(std::bind(
-        &path_generater::thread_worker, this, data1, std::ref(path_set2front)));
-    std::thread thread2(std::bind(
-        &path_generater::thread_worker, this, data2, std::ref(path_set2back)));
-    // wait thread 
-    thread1.join();
-    thread2.join();
+    while (loc < max_pt.x)
+    {
+        Spline loc_path = OnePath(Eigen::Vector3f(loc, 0, 0));
+        if(Adjust && compute_boundary(pre_path, boundary, Dir::right)) 
+            drawpath(*boundary, 0,255,0);
+        if(Adjust)
+            dynamic_adjust_path(&loc_path, boundary, Dir::right);
 
-    std::move(path_set2front.rbegin(), path_set2front.rend(), std::back_inserter(Path_set));
-    Path_set.push_back(std::move(Center_path));
-    std::move(path_set2back.begin(), path_set2back.end(), std::back_inserter(Path_set));
+        Path_set.push_back(loc_path);
+        pre_path = loc_path;
+        drawpath(loc_path, 0, 0, 255);
+        loc += step_size;  
+    }
     // >>>>>>>>>>>>>>>>  generate path  <<<<<<<<<<<<<<<< //
     ///////////////////////////////////////////////////////
 

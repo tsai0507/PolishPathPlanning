@@ -25,9 +25,9 @@ path_generater::path_generater(std::string cloud_name, double Radius) : toolRadi
             cloud->points[i].r = (uint8_t)255;
             cloud->points[i].g = (uint8_t)255;
             cloud->points[i].b = (uint8_t)255;
-            // cloud->points[i].x *= 1000;
-            // cloud->points[i].y *= 1000;
-            // cloud->points[i].z *= 1000;
+            cloud->points[i].x *= 1000;
+            cloud->points[i].y *= 1000;
+            cloud->points[i].z *= 1000;
         }
         transform = Eigen::Matrix4f::Identity();
         normal << 1, 0, 0;
@@ -308,6 +308,16 @@ void path_generater::slicing_method()
     std::cout << "use time: " << time << std::endl;
     std::cout << "number of paths: " << path_nums << std::endl;
     // pcl::io::savePCDFileASCII ("insert.pcd", *cloud);
+
+    const char* fileName = "output.csv";
+    std::ofstream outputFile(fileName, std::ios::app);
+    if (!outputFile.is_open()) {
+        std::cerr << "無法打開文件: " << fileName << std::endl;
+    }
+    else{
+        outputFile << time << std::endl;
+        outputFile.close();
+    }
 }
 
 void path_generater::estimate_normal()
@@ -713,7 +723,7 @@ void path_generater::Contact_Path_Generation()
         locateX += step_size;
         drawpath(Path_set[path_nums],255,0,0);
         path_nums++;   
-        printf("generate path: %d\n", path_nums);    
+        // printf("generate path: %d\n", path_nums);    
     }
     //show surface ande boundary of last one
     // GenerateBound = compute_boundary(Path_set[path_nums-1], boundary);
@@ -729,9 +739,19 @@ void path_generater::Contact_Path_Generation()
 
     gettimeofday(&end, NULL);
     time = 1000000 * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec;
-    double TIMES = time / 1000000;
-    printf("Toal Using Time: %lf\n", TIMES);
+    // double TIMES = time / 1000000;
+    printf("Toal Using Time: %ld\n", time);
     printf("Number of paths: %d\n", path_nums);
+
+    const char* fileName = "output.csv";
+    std::ofstream outputFile(fileName, std::ios::app);
+    if (!outputFile.is_open()) {
+        std::cerr << "無法打開文件: " << fileName << std::endl;
+    }
+    else{
+        outputFile << time << std::endl;
+        outputFile.close();
+    }
 }
 
 void path_generater::get_coverage(){

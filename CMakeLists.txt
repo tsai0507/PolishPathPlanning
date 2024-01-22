@@ -22,9 +22,9 @@ add_executable(main src/main.cpp src/Path_Generation.cpp)
 target_link_libraries(main ${PCL_LIBRARIES} GSL::gsl GSL::gslcblas)
 
 add_executable(connect src/connect.cpp 
-    src/path_slicing_alg.cpp
-    src/path_translation_alg.cpp
-    src/path_dynamic_alg.cpp 
+    src/Path_Alg/path_slicing_alg.cpp
+    src/Path_Alg/path_translation_alg.cpp
+    src/Path_Alg/path_dynamic_alg.cpp 
 )
 target_link_libraries(connect 
     ${PCL_LIBRARIES} 
@@ -35,5 +35,13 @@ target_link_libraries(connect
 add_executable(ft_test_path src/ft_test_path.cpp)
 target_link_libraries(ft_test_path Eigen3::Eigen)
 
-add_executable(contour src/contour.cpp src/contour_alg.cpp)
-target_link_libraries(contour ${PCL_LIBRARIES} GSL::gsl GSL::gslcblas)
+add_executable(connect1 src/connect1.cpp 
+    src/Path_Alg/path_slicing_alg.cpp
+    src/Path_Alg/path_translation_alg.cpp
+    src/Path_Alg/dynamic_alg_sdir.cpp
+)
+target_link_libraries(connect1
+    ${PCL_LIBRARIES} 
+    GSL::gsl GSL::gslcblas 
+    ${X11_LIBRARIES}
+)

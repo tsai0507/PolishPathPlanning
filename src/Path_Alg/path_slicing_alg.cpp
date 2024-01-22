@@ -225,8 +225,8 @@ MAP SectPath::insert_point(std::vector<int> indices, Eigen::Vector3f PlanePoint)
         insert_cloud.points[i].y = cloud->points[index_right].y + t * (cloud->points[index_left].y - cloud->points[index_right].y);
         insert_cloud.points[i].z = cloud->points[index_right].z + t * (cloud->points[index_left].z - cloud->points[index_right].z);
         insert_cloud.points[i].r = (uint8_t)255;
-        insert_cloud.points[i].g = (uint8_t)255;
-        insert_cloud.points[i].b = (uint8_t)255;
+        insert_cloud.points[i].g = (uint8_t)0;
+        insert_cloud.points[i].b = (uint8_t)0;
 
         std::vector<double> temp = {insert_cloud.points[i].x, insert_cloud.points[i].z};
         Node[insert_cloud.points[i].y] = temp;
@@ -335,8 +335,8 @@ void SectPath::GenPath()
 
 
     auto endT = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endT - startT).count()*0.001;
-    printf("Toal Using Time: %lf (ms)\n", duration);
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endT - startT).count();
+    printf("Toal Using Time: %ld \n", duration);
     printf("Number of paths: %d\n", path_nums);
     printf("Number of Point Cloud: %ld\n", cloud -> size());
 }
